@@ -1,5 +1,4 @@
 (setq load-path (append (list (expand-file-name "~/.emacs.d")) load-path))
-;;(load-library "p4")
 
 (setq tramp-default-method "ssh")
 
@@ -48,11 +47,17 @@ vg" "rss") t) "\\'")
 	    magic-mode-alist))
 (fset 'xml-mode 'nxml-mode)
 
+;; jade and stylus
+(defun my-jade-mode-hook ()
+  (setq indent-tabs-mode nil)
+  (message "my jade hook")
+)
+(add-hook 'jade-mode-hook 'my-jade-mode-hook)
 (add-to-list 'load-path "~/.emacs.d/jade-mode")
 (require 'sws-mode)
 (require 'jade-mode)    
 (add-to-list 'auto-mode-alist '("\\.styl$" . sws-mode))
-(add-to-list 'auto-mode-alist '("\\.jade$" . sws-mode))
+(add-to-list 'auto-mode-alist '("\\.jade$" . jade-mode))
 
 ;;this fixes the js2 indent madness
 (defun my-js2-indent-function ()
@@ -138,3 +143,18 @@ vg" "rss") t) "\\'")
 
 (add-hook 'js2-mode-hook 'my-js2-mode-hook)
 
+;; ediff config
+(setq ediff-split-window-function 'split-window-horizontally
+      ediff-quit-hook 'kill-emacs)
+
+;; coffee mode
+(add-to-list 'load-path "~/.emacs.d/vendor/coffee-mode")
+(require 'coffee-mode)
+(add-to-list 'auto-mode-alist '("\\.coffee$" . coffee-mode))
+(add-to-list 'auto-mode-alist '("Cakefile" . coffee-mode))
+(defun coffee-custom ()
+  "coffee-mode-hook"
+ (set (make-local-variable 'tab-width) 2))
+
+(add-hook 'coffee-mode-hook
+  '(lambda() (coffee-custom)))
